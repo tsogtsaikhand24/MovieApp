@@ -6,7 +6,7 @@ import { Header } from "./Header";
 
 export default function Home() {
   return (
-    <div classname="w-screen h-screen flex flex-col justify-center items-center bg-black">
+    <div className="w-full min-h-screen flex flex-col items-center bg-gray-50">
       <Header />
       <HeroSection />
       <PopularMovieList />
