@@ -1,65 +1,62 @@
 "use client";
 
+import { MovieCard } from "@/app/_components/Moviecard";
 import React, { useEffect, useState } from "react";
-import { MovieCard } from "../../_components/MovieCard";
-import { SeeMoreIcon } from "@/app/_icons/Moviezicon"; // эсвэл өөр icon чинь энд
-// ↑ энэ icon-ийн нэрийг өөрийн төслөөс шалгаарай
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const ACCESS_TOKEN =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMjI5ZmNiMGRmZTNkMzc2MWFmOWM0YjFjYmEyZTg1NiIsIm5iZiI6MTc1OTcxMTIyNy43OTAwMDAyLCJzdWIiOiI2OGUzMGZmYjFlN2Y3MjAxYjI5Y2FiYmIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.M0DQ3rCdsWnMw8U-8g5yGXx-Ga00Jp3p11eRyiSxCuY";
 
 export const PopularMovieList = () => {
-  const [movieData, setMovieData] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const getData = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `${BASE_URL}/movie/popular?language=en-US&page=1`,
-        {
-          headers: {
-            Authorization: `Bearer ${ACCESS_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const data = await response.json();
-      setMovieData(data.results || []);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [movies, setMovies] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(10); // анх 10-г харуулах
 
   useEffect(() => {
-    console.log("page running once");
-    getData();
+    const fetchPopularMovies = async () => {
+      try {
+        const res = await fetch(
+          `${BASE_URL}/movie/popular?language=en-US&page=1`,
+          {
+            headers: {
+              Authorization: `Bearer ${ACCESS_TOKEN}`,
+              accept: "application/json",
+            },
+          }
+        );
+        const data = await res.json();
+        setMovies(data.results || []);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      }
+    };
+
+    fetchPopularMovies();
   }, []);
 
-  if (loading) {
-    return <div className="text-center py-10">Loading...</div>;
-  }
+  const showAll = () => setVisibleCount(movies.length);
 
   return (
-    <div className="flex flex-col gap-8 pt-[52px]">
-      {/* Хэсгийн гарчиг ба See more товч */}
-      <div className="w-[1277px] h-[36px] flex justify-between items-center">
-        <p className="font-semibold text-2xl leading-[32px] tracking-[-0.6px] text-[#09090B]">
-          Popular
-        </p>
-        <button className="flex items-center gap-2 px-4">
-          <p className="text-sm font-medium text-[#09090B]">See more</p>
-        </button>
+    <div className="w-[1300px] h-[978px]">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold text-gray-800">Popular</h2>
+        {movies.length > visibleCount && (
+          <button
+            onClick={showAll}
+            className="text-sm font-medium text-gray-600 hover:text-gray-900 bg-white border rounded-lg px-3 py-1 shadow-sm"
+          >
+            See more
+          </button>
+        )}
       </div>
 
-      {/* Кино жагсаалт */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 px-[32px]">
-        {movieData.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
+      <div className="grid grid-cols-5 grid-rows-2 gap-10 justify-center items-center">
+        {movies.slice(0, visibleCount).map((movie) => (
+          <MovieCard
+            key={movie.id}
+            title={movie.title}
+            rating={movie.vote_average.toFixed(1)}
+            image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          />
         ))}
       </div>
     </div>

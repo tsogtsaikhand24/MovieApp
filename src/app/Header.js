@@ -6,7 +6,7 @@ import React from "react";
 
 export const Header = () => {
   return (
-    <div className="w-[1440px] h-[59px] flex flex-row justify-center items-center">
+    <div className="w-full h-full flex flex-row justify-center items-center">
       <div className="w-[1220px] h-[36px] flex flex-row justify-between items-center">
         {/* 🔹 Зүүн хэсэг — Logo */}
         <div className="w-[366px] h-[36px] gap-[8px] bg-white flex justify-start items-center">

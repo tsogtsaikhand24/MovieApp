@@ -9,9 +9,9 @@ export default function Home() {
     <div className="w-full min-h-screen flex flex-col items-center bg-gray-50">
       <Header />
       <HeroSection />
+      <UpcomingMovieList />
       <PopularMovieList />
       <TopMovieList />
-      <UpcomingMovieList />
     </div>
   );
 }
