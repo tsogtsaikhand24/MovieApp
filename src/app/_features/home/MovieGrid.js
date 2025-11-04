@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { MovieCard } from "@/app/_components/Moviecard";
+import { useRouter } from "next/navigation";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const ACCESS_TOKEN =
@@ -13,17 +14,20 @@ export const MovieGrid = ({
   initialCount = 10,
   language = "en-US",
   page = 1,
+  seeMorePath = "/upcoming",
 }) => {
   const [movies, setMovies] = useState([]);
   const [visibleCount, setVisibleCount] = useState(initialCount);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const router = useRouter();
+
   useEffect(() => {
     let isMounted = true;
+
     const fetchMovies = async () => {
       setLoading(true);
-      setError(null);
       try {
         const res = await fetch(
           `${BASE_URL}${fetchPath}?language=${language}&page=${page}`,
@@ -51,18 +55,19 @@ export const MovieGrid = ({
     };
   }, [fetchPath, language, page]);
 
-  const showAll = () => setVisibleCount(movies.length);
+  const handleSeeMore = () => {
+    router.push(seeMorePath);
+  };
 
   return (
     <div className="w-[1300px]">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
-
         {loading ? null : error ? (
           <div className="text-sm text-red-600">Error: {error}</div>
         ) : movies.length > visibleCount ? (
           <button
-            onClick={showAll}
+            onClick={handleSeeMore}
             className="text-sm font-medium text-gray-600 hover:text-gray-900 bg-white border rounded-lg px-3 py-1 shadow-sm"
           >
             See more
