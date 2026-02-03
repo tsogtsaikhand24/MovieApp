@@ -1,106 +1,51 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Genre } from "../_components/genre";
-import { Input } from "../_components/input";
-import { Logo } from "../_components/logo";
-import { GenrePopUP } from "../_components/genrePopUp";
-import { SearchPopUp } from "../_components/searchPopUp";
-import { SearchLoader } from "../_components/searchLoader";
-import { ThemeToggle } from "../_components/themeToggle";
 
-const options = {
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NzZiMzEwNzJlZDg5ODcwMzQxM2Y0NzkyYzZjZTdjYyIsIm5iZiI6MTczODAyNjY5NS44NCwic3ViIjoiNjc5ODJlYzc3MDJmNDkyZjQ3OGY2OGUwIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.k4OF9yGrhA2gZ4VKCH7KLnNBB2LIf1Quo9c3lGF6toE",
-  },
-};
+import MovieZIcon from "../_Icons/MovieZIcon";
+import { HeaderGenre } from "./HeaderGenre";
+import { useRouter } from "next/navigation";
+import { HeaderSearch } from "../_components/HeaderSearch";
+import { DarkMode } from "../_components/DarkMode";
+import { useMediaQuery } from "react-responsive";
+import { HeaderMobileSearch } from "../_components/HeaderMobileSearch";
+import { useState } from "react";
 
 export const Header = () => {
-  const [openGenre, setOpenGenre] = useState(false);
-  const [inputValue, SetInputValue] = useState("");
-  const [search, setSearch] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [mobileSearch, setMobileSearch] = useState(false);
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setMobileSearch(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    handleResize();
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-  const handleInput = (e) => {
-    SetInputValue(e.target.value);
-    console.log(inputValue);
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const handleClickMovieZButton = () => {
+    router.push(`/`);
   };
-  const getMovies = async () => {
-    setLoading(true);
-    if (!inputValue.trim()) {
-      setSearch([]);
-      setLoading(false);
-      return;
-    }
-    const data = await fetch(
-      `https://api.themoviedb.org/3/search/movie?query=${inputValue}&language=en-US&page=1`,
-      options
-    );
 
-    const jsonData = await data.json();
-    console.log("this is search data", jsonData);
-    setSearch(jsonData.results.slice(0, 5));
-    console.log("search", search);
-    setLoading(false);
-  };
-  useEffect(() => {
-    getMovies();
-  }, [inputValue]);
+  const isMobile = useMediaQuery({
+    query: "(max-width: 640px)",
+  });
+
+  console.log("isMobile", isMobile);
+
   return (
-    <div className="w-full bg-[#f5f5f7] h-18 flex items-center px-7 justify-between z-20 dark:bg-black">
-      {!mobileSearch && <Logo />}
-      <div
-        className={`flex flex-col relative w-[60%] max-md:w-fit h-9 gap-2 ${
-          mobileSearch ? "max-md:w-full" : ""
-        }`}
-      >
-        <div className="flex md:justify-between max-md:gap-5">
+    <div className="w-full h-[56px] sm:h-[59px] flex items-center justify-center py-3 sm:py-4 px-4 md:px-6 lg:px-8">
+      <div className="w-full max-w-[1280px] h-auto flex justify-between items-center gap-4">
+        {!isOpen && (
           <div
-            className={`flex gap-3.5 max-xs:gap-1.5 ${
-              mobileSearch ? "w-full flex justify-center items-center" : ""
-            }`}
+            className="flex gap-1.5 sm:gap-2 items-center text-[#4338CA] dark:text-[#818CF8] text-sm sm:text-base italic font-bold leading-[20px] tracking-[0.32px] cursor-pointer shrink-0 justify-center"
+            onClick={handleClickMovieZButton}
           >
-            <Genre
-              onClick={() => setOpenGenre(!openGenre)}
-              mobileSearch={mobileSearch}
-            />
-            <Input
-              onChange={handleInput}
-              value={inputValue}
-              mobileSearch={mobileSearch}
-              onClick={() => setMobileSearch((prev) => !prev)}
-              setMobileSearch={setMobileSearch}
-              SetInputValue={SetInputValue}
-              setSearch={setSearch}
-            />
+            <MovieZIcon />
+            Movie Z
           </div>
-          {!mobileSearch && <ThemeToggle />}
+        )}
+        <div className="flex gap-2 sm:gap-3 items-end flex-1 justify-end sm:justify-center  md:justify-center lg:justify-center">
+          <div className="hidden lg:flex gap-3 ">
+            <HeaderGenre />
+            <HeaderSearch />
+          </div>
+          <HeaderMobileSearch isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
-        {openGenre && <GenrePopUP />}
-        {loading ? (
-          <SearchLoader />
-        ) : search.length > 0 ? (
-          <SearchPopUp search={search} inputValue={inputValue} />
-        ) : inputValue.trim() ? (
-          <div className="absolute top-full left-0 w-full bg-white border border-gray-200 shadow rounded-lg p-4 text-center text-gray-500 md:w-150 mt-2.5 dark:bg-black">
-            No results found
+        {!isOpen && (
+          <div className="shrink-0">
+            <DarkMode />
           </div>
-        ) : null}
+        )}
       </div>
     </div>
   );

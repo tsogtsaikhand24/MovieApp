@@ -1,18 +1,16 @@
-import { Footer } from "./_features/Footer";
 import { Header } from "./_features/Header";
-import { HeroSection } from "./_features/heroSection";
-import { PopularMovieList } from "./_features/PopularMovieList";
-import { TopRatedMovieList } from "./_features/topRatedMovieList";
-import { UpcomingMovieList } from "./_features/UpcomingMovielist";
+import { HeroSection } from "./_features/home/HeroSection";
+import { Footer } from "./_features/Footer";
+import { MovieList } from "./_features/home/MovieList";
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-12 w-full min-h-screen max-2xl:gap-8 max-md:gap-6 max-sm:gap-3 dark:bg-black">
+    <div className="flex flex-col items-center box-border">
       <Header />
       <HeroSection />
-      <UpcomingMovieList />
-      <PopularMovieList />
-      <TopRatedMovieList />
+      <MovieList type="upcoming" title="Upcoming" />
+      <MovieList type="popular" title="Popular" />
+      <MovieList type="top_rated" title="Top Rated" />
       <Footer />
     </div>
   );
