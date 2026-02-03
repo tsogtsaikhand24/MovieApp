@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import VideoModal from "./Videomodal";
-import Star from "../_icons/star";
-import BigStar from "../_icons/BigStar";
+import BigStar from "../_icons/BigStar.jsx";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const ACCESS_TOKEN =
@@ -25,7 +24,7 @@ export default function Card1({ movie }) {
       const data = await res.json();
 
       const trailer = data.results?.find(
-        (v) => v.type === "Trailer" && v.site === "YouTube"
+        (v) => v.type === "Trailer" && v.site === "YouTube",
       );
 
       if (trailer) {

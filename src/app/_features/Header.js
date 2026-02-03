@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from "react";
 import Filmicon from "../_icons/Filmicon";
 import Filmtitle from "../_icons/Filmtitle";
-import Moonicon from "../_icons/Moonicon";
 import { Genre } from "../_components/Genre";
 import Search from "../_components/Search";
 import Link from "next/link";
+import Moonicon from "../_icons/Moonicon";
 
 export const Header = () => {
   const [isDark, setIsDark] = useState(false);
