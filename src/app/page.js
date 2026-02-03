@@ -1,31 +1,19 @@
-import { Header } from "./Header";
-// import { MovieGrid } from "./_features/home/MovieGrid";
-import Test123 from "./_features/home/Test123";
+"use client";
+
+import React from "react";
+import { Footer } from "./_features/Footer";
+import { Header } from "./_features/Header";
+import { HeroSection } from "./_features/home/HeroSection";
+import { MovieList } from "./_features/home/MovieList";
 
 export default function Home() {
   return (
-    <div className="w-full min-h-screen flex flex-col items-center bg-gray-50 gap-[20px]">
+    <div>
       <Header />
-      <Test123 />
+      <HeroSection />
+      <MovieList type="Upcoming Movielist" />
 
-      {/* 
-      <MovieGrid
-        title="Upcoming"
-        fetchPath="/movie/upcoming"
-        seeMorePath="/upcoming"
-      />
-
-      <MovieGrid
-        title="Popular"
-        fetchPath="/movie/popular"
-        seeMorePath="/popular"
-      />
-
-      <MovieGrid
-        title="Top Rated"
-        fetchPath="/movie/top_rated"
-        seeMorePath="/toprated"
-      /> */}
+      <Footer />
     </div>
   );
 }
